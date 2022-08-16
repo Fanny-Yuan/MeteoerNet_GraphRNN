@@ -21,12 +21,12 @@ import msr_dataset
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--gpu', type=int, default=0, help='GPU to use [default: GPU 0]')
-parser.add_argument('--model', default='model_cls_direct', help='Model name [default: pointnet2_cls_ssg]')
+parser.add_argument('--model', default='model_cls_graphrnn_v2', help='Model name [default: pointnet2_cls_ssg]')
 parser.add_argument('--model_path', default='', help='Model checkpint path [default: ]')
 parser.add_argument('--log_dir', default='log', help='Log dir [default: log]')
-parser.add_argument('--num_point', type=int, default=2048, help='Point Number [default: 1024]')
+parser.add_argument('--num_point', type=int, default=1024, help='Point Number [default: 1024]')
 parser.add_argument('--data', default='processed_data', help='Data path [default: ]')
-parser.add_argument('--num_frames', type=int, default=8, help='Number of frames [default: 1]')
+parser.add_argument('--num_frames', type=int, default=18, help='Number of frames [default: 1]')
 parser.add_argument('--skip_frames', type=int, default=1, help='Skip frames [default: 1]')
 parser.add_argument('--max_epoch', type=int, default=150, help='Epoch to run [default: 251]')
 parser.add_argument('--batch_size', type=int, default=16, help='Batch Size during training [default: 16]')
@@ -174,10 +174,10 @@ def train():
             sys.stdout.flush()
 
             train_one_epoch(sess, ops, train_writer)
-            eval_one_epoch(sess, ops, test_writer)
 
             # Save the variables to disk.
-            if epoch % 10 == 0:
+            if (epoch+1) % 10 == 0:
+                eval_one_epoch(sess, ops, test_writer,epoch)
                 save_path = saver.save(sess, os.path.join(LOG_DIR, "model.ckpt"))
                 log_string("Model saved in file: %s" % save_path)
 
@@ -223,13 +223,13 @@ def train_one_epoch(sess, ops, train_writer):
     TRAIN_DATASET.shuffle()
 
 
-def eval_one_epoch(sess, ops, test_writer):
+def eval_one_epoch(sess, ops, test_writer,epoch):
     """ ops: dict mapping from string to tf ops """
-    global EPOCH_CNT
+    #global EPOCH_CNT
     is_training = False
 
     log_string(str(datetime.now()))
-    log_string('---- EPOCH %03d EVALUATION ----'%(EPOCH_CNT))
+    log_string('---- EPOCH %03d EVALUATION ----'%(epoch))
 
     # Make sure batch data is of same size
     cur_batch_data = np.zeros((BATCH_SIZE,NUM_POINT*NUM_FRAME,3))
@@ -302,7 +302,7 @@ def eval_one_epoch(sess, ops, test_writer):
     log_string('eval per sequence accuracy: %f'% (per_seq_acc))
     log_string('eval per sequence per class acc: ' + str(per_seq_per_class_acc))
 
-    EPOCH_CNT += 1
+    #EPOCH_CNT += 1
 
 
 
