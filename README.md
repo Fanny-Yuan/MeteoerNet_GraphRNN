@@ -12,7 +12,7 @@ This project adapts MeteorNet and Graph-RNN to human action recognition. The str
 │  ├─3d_interpolation\
 │  ├─grouping\
 │  └─sampling\
-└─utils\
+└─utils
 
 Models are put in folder action_cls. The core part of models, such as the Meteor module and Graph-RNN module are put in utils. The dataset should be put in Depth. Chain_interp_flow_preprocess is the grouping code for MeteroNet, and tf_ops are codes for TF operators.
 
@@ -24,7 +24,7 @@ CUDA 11.6.1\
 OpenCV
 
 ## Compile Customized TF Operators
-The TF operators are included under `tf_ops`, you need to compile them first by `make` under each ops subfolder. Make sure to change the CUDA_HOME as the same as yours. Change the arch version according to your CUDA. For example, our cuda Tesla V100, the corresponding arch version is sm_70. You can check <a href="https://en.wikipedia.org/wiki/CUDA#GPUs_supported">CUDA Compute Capability</a> to find the version that suits your GPU if necessary**.
+The TF operators are included under `tf_ops`, you need to compile them first by `make` under each ops subfolder. Make sure to change the CUDA_HOME as the same as yours. Change the arch version according to your CUDA. For example, our cuda Tesla V100, the corresponding arch version is sm_70. You can check <a href="https://en.wikipedia.org/wiki/CUDA#GPUs_supported">CUDA Compute Capability</a> to find the version that suits your GPU.
 
 ## Data processing
 
